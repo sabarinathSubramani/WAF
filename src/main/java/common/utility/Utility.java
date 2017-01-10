@@ -8,7 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
-import org.openqa.selenium.os.CommandLine;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -37,7 +37,6 @@ public class Utility {
     }
     
     public static Properties readFromPropertiesFile(String fileName) throws IOException{
-        //InputStream resourceAsStream =  Thread.currentThread().getContextClassLoader().getResourceAsStream("/SellerE2ETests/src/test/java/resources/"+fileName);
         InputStream resourceAsStream = Utility.class.getClassLoader().getResourceAsStream(fileName);
     	Properties prop = new Properties();
     	prop.load(resourceAsStream);
@@ -71,7 +70,4 @@ public class Utility {
     	return gson.toJson(obj);
     }
 
-    public static void main(String [] a) {
-        System.out.println(CommandLine.find("chromedriver"));
-    }
 }

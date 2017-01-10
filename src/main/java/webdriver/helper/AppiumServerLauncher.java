@@ -1,12 +1,12 @@
 package webdriver.helper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author sabarinath.s Date: 19-Jan-2016 Time: 6:35:02 pm
@@ -25,11 +25,7 @@ public class AppiumServerLauncher {
 
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("ANDROID_HOME", System.getenv("ANDROID_HOME"));
-		builder.usingAnyFreePort()
-				.withArgument(GeneralServerFlag.LOG_LEVEL.AUTOMATION_NAME,
-						"appium")
-				.withArgument(GeneralServerFlag.PLATFORM_NAME, platFormName)
-				.withEnvironment(map);
+		builder.usingAnyFreePort().withEnvironment(map);
 		return builder;
 	}
 

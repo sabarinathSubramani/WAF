@@ -31,33 +31,29 @@ public class HtmlHelper {
 	public  static void generateVelocityTemplate(ClientRequest request, ClientResponse response, File file){
 
 		try{
-		VelocityEngine ve = new VelocityEngine();
-		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-		ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-		ve.init();
+			VelocityEngine ve = new VelocityEngine();
+			ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+			ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+			ve.init();
 
-		VelocityContext context = new VelocityContext();
-		context.put("request", request);
-		context.put("response", response);
-		System.out.println(Utility.prettyPrintJson(response.getEntityInputStream()));
-		response.getEntityInputStream().reset();
-		context.put("requestHeaders", Lists.newArrayList(request.getHeaders().entrySet()));
-		context.put("responseHeaders", Lists.newArrayList(response.getHeaders()!=null?response.getHeaders().entrySet():new ArrayList()));
-		context.put("utility", new Utility());
-		context.put("dateTool", new DateTool());
-		context.put("mathTool", new MathTool());
-		context.put("displayTool", new DisplayTool());
-		
-		if(response!=null)
+			VelocityContext context = new VelocityContext();
+			context.put("request", request);
+			context.put("response", response);
+			System.out.println(Utility.prettyPrintJson(response.getEntityInputStream()));
+			response.getEntityInputStream().reset();
+			context.put("requestHeaders", Lists.newArrayList(request.getHeaders().entrySet()));
+			context.put("responseHeaders", Lists.newArrayList(response.getHeaders()!=null?response.getHeaders().entrySet():new ArrayList<>()));
+			context.put("utility", new Utility());
+			context.put("dateTool", new DateTool());
+			context.put("mathTool", new MathTool());
+			context.put("displayTool", new DisplayTool());
 			context.put("headerSize", request.getHeaders().size()>response.getHeaders().size()?request.getHeaders().size():response.getHeaders().size());
-		else
-			context.put("headerSize", request.getHeaders().size());
 
-		FileWriter fw = new FileWriter(file);
-		Template template = ve.getTemplate("apireport.vm");
-		template.merge(context, fw );
-		fw.flush();
-		fw.close();
+			FileWriter fw = new FileWriter(file);
+			Template template = ve.getTemplate("apireport.vm");
+			template.merge(context, fw );
+			fw.flush();
+			fw.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
