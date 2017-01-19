@@ -2,13 +2,10 @@ package webdriver.helper;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.reflect.FieldUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -17,23 +14,24 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-import common.configurations.TestContext;
+
 import common.configurations.ContextManager;
+import common.configurations.TestContext;
 import common.configurations.WebDriverManager;
 import common.helpers.Log;
 import common.utility.DownloadFilenameFilterFactory;
-import common.utility.FindByAnnotationConverter;
+import webdriver.helper.pageFactoryUtils.FieldDecorator;
 
 /**
- * @author sabarinath.s Date: 12-Apr-2016 Time: 6:24:00 pm
+ * @author sabarinath.s Date: 
+ * 12-Apr-2016 Time: 6:24:00 pm
  */
 
 public class WebPage {
@@ -43,12 +41,13 @@ public class WebPage {
 	FluentWait<WebDriver> wait;
 
 	public WebPage() {
-		driver = (RemoteWebDriver) WebDriverManager.getWebDriver(true);
-		actionBuilder = new Actions(driver);
-		wait = new WebDriverWait(driver, ContextManager.getGlobalContext()
-				.getWebDriverTimeOut());
-		initElements(this);
-		waitForPageToload();
+		//driver = (RemoteWebDriver) WebDriverManager.getWebDriver(true);
+		//actionBuilder = new Actions(driver);
+		//wait = new WebDriverWait(driver, ContextManager.getGlobalContext()
+			//	.getWebDriverTimeOut());
+		PageFactory.initElements(new FieldDecorator(driver), this);
+		//initElements(this);
+		//waitForPageToload();
 	}
 
 	public WebPage(String url) {
@@ -70,7 +69,7 @@ public class WebPage {
 		});
 	}
 
-	public void initElements(WebPage page) {
+	/*public void initElements(WebPage page) {
 
 		// Get fields list from page class and its super class
 		ArrayList<Field> fieldsList = Lists.newArrayList(page.getClass()
@@ -101,7 +100,7 @@ public class WebPage {
 
 		}
 
-	}
+	}*/
 
 	public void waitforElementPresent(PageElement ele) {
 		ele.waitforElementPresent();

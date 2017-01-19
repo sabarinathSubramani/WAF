@@ -14,3 +14,4 @@ target/*
 velocity.log
 
 /target/
+/.apt_generated/

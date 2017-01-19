@@ -16,7 +16,8 @@ import common.configurations.WebDriverManager;
 import common.helpers.Log;
 
 /**
- * @author sabarinath.s Date: 13-Apr-2016 Time: 3:52:59 pm
+ * @author sabarinath.s Date: 
+ * 13-Apr-2016 Time: 3:52:59 pm
  */
 
 public class PageElement {
@@ -137,7 +138,7 @@ public class PageElement {
 	public void waitforElementPresent() {
 		WebDriverWait wait = new WebDriverWait(WebDriverManager.getWebDriver(),
 				ContextManager.getGlobalContext()
-						.getWebDriverTimeOutInSeconds());
+				.getWebDriverTimeOutInSeconds());
 		wait.until(ExpectedConditions.presenceOfElementLocated(by));
 	}
 
@@ -148,7 +149,7 @@ public class PageElement {
 		WebDriverWait wait = new WebDriverWait(
 				((RemoteWebElement) webElement).getWrappedDriver(),
 				ContextManager.getGlobalContext()
-						.getWebDriverTimeOutInSeconds());
+				.getWebDriverTimeOutInSeconds());
 		wait.until(new ExpectedCondition<Boolean>() {
 			@Override
 			public Boolean apply(WebDriver driver) {

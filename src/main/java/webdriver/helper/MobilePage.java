@@ -1,22 +1,13 @@
 package webdriver.helper;
 
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
-import io.appium.java_client.pagefactory.AndroidFindBy;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-
-import org.apache.commons.lang.reflect.FieldUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.google.common.collect.Lists;
 import common.configurations.ContextManager;
 import common.helpers.Log;
-import common.utility.FindByAnnotationConverter;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 @SuppressWarnings("unchecked")
 public class MobilePage extends WebPage {
@@ -25,7 +16,7 @@ public class MobilePage extends WebPage {
 
 	}
 
-	@Override
+/*	@Override
 	public void initElements(WebPage page) {
 
 		// Get fields list from page class and its super class
@@ -57,7 +48,7 @@ public class MobilePage extends WebPage {
 
 		}
 
-	}
+	}*/
 
 	public void waitForActivity(final String activityName) {
 		WebDriverWait wait = new WebDriverWait(driver, ContextManager

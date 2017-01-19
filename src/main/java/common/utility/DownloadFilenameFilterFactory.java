@@ -22,9 +22,9 @@ public class DownloadFilenameFilterFactory {
 			case CHROME:
 				return fileNameWithExtension!=null?new ChromeFilenameFilter(fileNameWithExtension): new ChromeFilenameFilter();
 			default:
-				break;
+				return null;
 		}
-		return null;
+		
 	}
 
 	public static abstract class DownloadFileNameFilter  implements FilenameFilter  {
