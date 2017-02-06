@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite name="SellerDashBoard Tests" verbose="1"
+<suite name="YantriKaran Tests" verbose="1"
 	parallel="tests">
 	<listeners>
-		<listener class-name="fk.common.helpers.TestNGHtmlReportGenerator" />
-		<listener class-name="fk.common.helpers.TestNGTestListener" />
+		<listener class-name="common.helpers.TestNGHtmlReportGenerator" />
+		<listener class-name="common.helpers.TestNGTestListener" />
 	</listeners>
-	<parameter name="SellerDashBoardUrl" value="https://seller.flipkart.com/" />
 	<parameter name="retry_enabled" value="false" />
 	<parameter name="enable_logs" value="true" />
 	<parameter name="browser" value="CHROME" />
@@ -19,7 +18,7 @@
 			</run>
 		</groups>
 		<packages>
-			<package name="sptafTests" />
+			<package name="test" />
 		</packages>
 	</test>
 </suite>

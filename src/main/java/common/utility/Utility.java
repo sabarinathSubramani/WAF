@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 
 
 
@@ -53,8 +54,11 @@ public class Utility {
     
     public static String prettyPrintJson(Reader json){
     	
+    	JsonReader reader = new JsonReader(json);
+    	reader.setLenient(true);
     	JsonParser parser = new JsonParser();
-    	JsonElement parse = parser.parse(json);
+    	JsonElement parse = parser.parse(reader);
+    	
     	Gson gson = new GsonBuilder().setPrettyPrinting().create();
     	return gson.toJson(parse);
     }

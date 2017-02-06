@@ -39,7 +39,7 @@ public class HtmlHelper {
 			VelocityContext context = new VelocityContext();
 			context.put("request", request);
 			context.put("response", response);
-			System.out.println(Utility.prettyPrintJson(response.getEntityInputStream()));
+			//System.out.println(Utility.prettyPrintJson(response.getEntityInputStream()));
 			response.getEntityInputStream().reset();
 			context.put("requestHeaders", Lists.newArrayList(request.getHeaders().entrySet()));
 			context.put("responseHeaders", Lists.newArrayList(response.getHeaders()!=null?response.getHeaders().entrySet():new ArrayList<>()));

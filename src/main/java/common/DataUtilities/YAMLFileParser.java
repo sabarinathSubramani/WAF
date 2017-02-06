@@ -21,12 +21,11 @@ public class YAMLFileParser {
 		return yaml.load(resourceAsStream).toString();
 	}
 	
-	public static Object readYAMLAsJavaPojo(String fileName, Class<?> c){
+	public static <T> T readYAMLAsJavaPojo(String fileName, Class<T> c){
 		
 		InputStream resourceAsStream = YAMLFileParser.class.getClassLoader().getResourceAsStream(fileName);
-		Constructor constructor = new Constructor(c);
-		Yaml yaml = new Yaml(constructor);
-		return yaml.load(resourceAsStream);
+		Yaml yaml = new Yaml();
+		return yaml.loadAs(resourceAsStream, c);
 	}
 		
 	

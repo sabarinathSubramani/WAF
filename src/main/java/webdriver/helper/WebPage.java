@@ -41,13 +41,11 @@ public class WebPage {
 	FluentWait<WebDriver> wait;
 
 	public WebPage() {
-		//driver = (RemoteWebDriver) WebDriverManager.getWebDriver(true);
-		//actionBuilder = new Actions(driver);
-		//wait = new WebDriverWait(driver, ContextManager.getGlobalContext()
-			//	.getWebDriverTimeOut());
+		driver = (RemoteWebDriver) WebDriverManager.getWebDriver(true);
+		actionBuilder = new Actions(driver);
+		wait = new WebDriverWait(driver, ContextManager.getGlobalContext().getWebDriverTimeOut());
 		PageFactory.initElements(new FieldDecorator(driver), this);
-		//initElements(this);
-		//waitForPageToload();
+		waitForPageToload();
 	}
 
 	public WebPage(String url) {

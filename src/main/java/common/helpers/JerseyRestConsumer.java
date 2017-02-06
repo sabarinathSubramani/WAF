@@ -1,5 +1,21 @@
 package common.helpers;
 
+import java.io.IOException;
+import java.net.URI;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Map;
+import java.util.Map.Entry;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.sun.jersey.api.client.Client;
@@ -7,14 +23,7 @@ import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import java.io.IOException;
-import java.net.URI;
-import java.util.Map;
-import java.util.Map.Entry;
+import com.sun.jersey.client.urlconnection.HTTPSProperties;
 
 /**
  * @author sabarinath.s
@@ -29,14 +38,29 @@ public class JerseyRestConsumer {
 	protected MediaType responseMediaType = null;
 	protected String baseEndPoint = null;
 
-	public JerseyRestConsumer(){
-
-	}
 
 	public JerseyRestConsumer(MediaType requestType, MediaType responseType, String endPoint){
 
 		Log.info("initializing Jersey Rest consumer - endpoint: "+ endPoint+" Default Request Mime type - "+requestType.toString()+" Default Response type - " + responseType.toString() );
 		initConsumer();
+		requestMediaType = requestType;
+		responseMediaType = responseType;
+		baseEndPoint = endPoint;
+	}
+
+	public JerseyRestConsumer(MediaType requestType, MediaType responseType, String endPoint, boolean isHttps){
+
+		Log.info("initializing secure Jersey Rest consumer - endpoint: "+ endPoint+" Default Request Mime type - "+requestType.toString()+" Default Response type - " + responseType.toString() );
+		initConsumerForHttpsConnection(HttpsProtocol.SSL);
+		requestMediaType = requestType;
+		responseMediaType = responseType;
+		baseEndPoint = endPoint;
+	}
+
+	public JerseyRestConsumer(MediaType requestType, MediaType responseType, String endPoint, boolean isHttps, HttpsProtocol protocol){
+
+		Log.info("initializing secure Jersey Rest consumer - endpoint: "+ endPoint+" Default Request Mime type - "+requestType.toString()+" Default Response type - " + responseType.toString() );
+		initConsumerForHttpsConnection(protocol);
 		requestMediaType = requestType;
 		responseMediaType = responseType;
 		baseEndPoint = endPoint;
@@ -71,11 +95,50 @@ public class JerseyRestConsumer {
 		ClientConfig config = new DefaultClientConfig();
 		JacksonJsonProvider jacksonJsonProvider =
 				new JacksonJsonProvider()
-		.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		config.getSingletons().add(jacksonJsonProvider);
 		client = Client.create(config);
 	}
 
+	protected void initConsumerForHttpsConnection(HttpsProtocol protocol){
+
+		HostnameVerifier hostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
+		ClientConfig config = new DefaultClientConfig();
+		SSLContext ctx;
+		try {
+			//TrustManager[] trustManagers = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).getTrustManagers();
+
+			X509TrustManager x509TrustManager = new X509TrustManager() {
+				@Override
+				public X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+				@Override
+				public void checkServerTrusted(X509Certificate[] chain, String authType)
+						throws CertificateException {
+				}
+				@Override
+				public void checkClientTrusted(X509Certificate[] chain, String authType)
+						throws CertificateException {
+				}
+			};
+			 
+
+			ctx = SSLContext.getInstance(protocol.name());
+
+			TrustManager[] trustManagers = {x509TrustManager};
+			ctx.init(null, trustManagers , null);
+			config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES, new HTTPSProperties(hostnameVerifier, ctx));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		JacksonJsonProvider jacksonJsonProvider =
+				new JacksonJsonProvider()
+				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		config.getSingletons().add(jacksonJsonProvider);
+		client = Client.create(config);
+	}
 
 	protected URI constructURI(String path, Map<String, String> queryParams){
 
@@ -86,7 +149,7 @@ public class JerseyRestConsumer {
 				uriBuilder = uriBuilder.queryParam(e.getKey(), e.getValue());
 			}
 		return uriBuilder.build();
-	}
+	}	
 
 	protected ClientRequest buildRequest(URI uri,Method m, Map<String, String> headers, Object requestEntity) {
 
@@ -122,7 +185,7 @@ public class JerseyRestConsumer {
 	}
 
 
-/*	protected Object executeMethod(ClientRequest request, Class<?> responseClass) throws RestServiceException{
+	/*	protected Object executeMethod(ClientRequest request, Class<?> responseClass) throws RestServiceException{
 
 		ClientResponse response = executeMethod(request);
 		return response.getEntity(responseClass);
@@ -147,7 +210,7 @@ public class JerseyRestConsumer {
 				return response;
 			}
 			else{
-				//String string =response.getEntity(String.class);
+				String string =response.getEntity(String.class);
 				Log.apiUnsuccessFulLog(request, response);
 				throw new RestServiceException("Api call failed with status code: "+response.getStatus(), response);
 			}
@@ -181,6 +244,10 @@ public class JerseyRestConsumer {
 			return methodName;
 		}
 
+	}
+
+	public enum HttpsProtocol{
+		SSL, TLS
 	}
 
 }

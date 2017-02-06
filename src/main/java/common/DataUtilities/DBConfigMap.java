@@ -10,7 +10,6 @@ import lombok.Data;
 public class DBConfigMap{
 	
 	public Map<String, DBConfig> dbConfigMap = new HashMap<String, DBConfig>();
-	
 	@Data
 	public static class DBConfig{
 		private String host;

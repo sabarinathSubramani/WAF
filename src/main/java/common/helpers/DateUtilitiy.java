@@ -4,6 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+
+import org.apache.commons.lang.time.DateUtils;
 
 public class DateUtilitiy
 {
@@ -12,7 +15,16 @@ public class DateUtilitiy
 	private Calendar calendar;
 	private long unixTime;
 
+	
+	public static Date parseDate(String date, String formatString) throws ParseException{
+		SimpleDateFormat format = new SimpleDateFormat(formatString);
+		return format.parse(date);
+	}
 
+	public static void main(String a[]) throws ParseException{
+		Date parseDate = parseDate("Sat, 04 Feb 2017 18:25:15 GMT","EEE, dd MMM yyyy hh:mm:ss z");
+		Date addSeconds = DateUtils.addSeconds(parseDate, 300);
+	}
 	public final static String   DateInYYYYMMDDTHHMMSSZ = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
 	public String getFormatedDate(String formatString){

@@ -11,7 +11,7 @@
 			<div class="container-fluid">
 
 		<div class="row" id="header">
-		<div title="dummy image. replace with your company logo" class ="col-md-4"><img src="https://dummyimage.com/300x100/" ></div>
+		<div title="dummy image. replace with your company logo" class ="col-md-4"><img src="test" ></div>
 		<div class ="col-md-8"><h1>TestNG report</h1></div>
 		</div>
 		
@@ -43,7 +43,9 @@
 	<div class="container-fluid">
 	
 	<div class ="row">
-	<table class="table table-striped table-bordered">
+	<div class ="lg-12 md-12 sm-12 xs-12">
+	
+	<table id=headerTable class="table table-striped table-bordered">
 	<thead class="text-center">
     <tr>
       <th class="text-center col-md-6" colspan="2">Request Headers</th>
@@ -82,13 +84,15 @@
 	<td  colspan="2"><div class="payload"><pre id= "responsePayload"></pre></div></td>
 	</tr>
 	
+	
 	<script>
-var text = $utility.prettyPrintJson($response.getEntityInputStream());
+		var text = $utility.prettyPrintJson($response.getEntityInputStream());
 
-var obj = JSON.stringify(text,null, 2);
+		var obj = JSON.stringify(text,null, 2);
 
-document.getElementById("responsePayload").innerHTML = obj;
-</script>
+		document.getElementById("responsePayload").innerHTML = obj;
+	</script>
+
 	<script>
 var text = $utility.prettyPrintJson($utility.prettyPrintJson($request.getEntity()));
 
@@ -99,6 +103,7 @@ document.getElementById("requesetPayload").innerHTML = obj;
 
 	</tbody>
 	</table>
+	</div>
 	</div>
 
 	</div>
