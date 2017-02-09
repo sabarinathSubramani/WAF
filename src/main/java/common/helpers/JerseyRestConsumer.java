@@ -2,20 +2,20 @@ package common.helpers;
 
 import java.io.IOException;
 import java.net.URI;
-import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.sun.jersey.api.client.Client;
@@ -40,18 +40,17 @@ public class JerseyRestConsumer {
 
 
 	public JerseyRestConsumer(MediaType requestType, MediaType responseType, String endPoint){
-
-		Log.info("initializing Jersey Rest consumer - endpoint: "+ endPoint+" Default Request Mime type - "+requestType.toString()+" Default Response type - " + responseType.toString() );
-		initConsumer();
-		requestMediaType = requestType;
-		responseMediaType = responseType;
-		baseEndPoint = endPoint;
+		this(requestType,responseType,endPoint, false );
 	}
 
 	public JerseyRestConsumer(MediaType requestType, MediaType responseType, String endPoint, boolean isHttps){
 
+
 		Log.info("initializing secure Jersey Rest consumer - endpoint: "+ endPoint+" Default Request Mime type - "+requestType.toString()+" Default Response type - " + responseType.toString() );
-		initConsumerForHttpsConnection(HttpsProtocol.SSL);
+		if(isHttps)
+			initConsumerForHttpsConnection(HttpsProtocol.SSL);
+		else
+			initConsumer();
 		requestMediaType = requestType;
 		responseMediaType = responseType;
 		baseEndPoint = endPoint;
@@ -106,7 +105,6 @@ public class JerseyRestConsumer {
 		ClientConfig config = new DefaultClientConfig();
 		SSLContext ctx;
 		try {
-			//TrustManager[] trustManagers = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).getTrustManagers();
 
 			X509TrustManager x509TrustManager = new X509TrustManager() {
 				@Override
@@ -122,7 +120,7 @@ public class JerseyRestConsumer {
 						throws CertificateException {
 				}
 			};
-			 
+
 
 			ctx = SSLContext.getInstance(protocol.name());
 

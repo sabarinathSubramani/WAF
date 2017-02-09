@@ -7,11 +7,25 @@
 	</listeners>
 	<parameter name="retry_enabled" value="false" />
 	<parameter name="enable_logs" value="true" />
-	<parameter name="browser" value="CHROME" />
+	
 	<parameter name="environment" value="QA" />
 	<parameter name="webdriver_timeout" value="60000" />
 
 	<test name="APP Test">
+		
+	<parameter name="ODIN_URL" value="http:///nnnnow.com" />
+		<groups>
+			<run>
+				<include name="test" />
+			</run>
+		</groups>
+		<packages>
+			<package name="test" />
+		</packages>
+	</test>
+	
+	<test name="APP Test">
+	<parameter name="ODIN_URL" value="qa.odin.com" />
 		<groups>
 			<run>
 				<include name="test" />

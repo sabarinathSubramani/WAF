@@ -70,7 +70,7 @@ public class TestNGHtmlReportGenerator implements IReporter {
 			}
 
 		}
-		System.out.println(resultLogMapping.toString());
+	
 		// move css file to output forlder
 		try {
 			InputStream resourceAsStream = getClass().getClassLoader()
