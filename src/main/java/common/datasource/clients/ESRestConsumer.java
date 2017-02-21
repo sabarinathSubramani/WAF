@@ -1,6 +1,5 @@
 package common.datasource.clients;
 
-import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +12,7 @@ import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
+import com.beust.jcommander.internal.Lists;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
@@ -26,7 +26,6 @@ import common.helpers.JerseyRestConsumer;
 public class ESRestConsumer extends JerseyRestConsumer {
 
 	public static final Integer DEFAULT_LIMIT = 1000;
-	private static FileOutputStream out;
 
 	public ESRestConsumer() {
 
@@ -45,7 +44,7 @@ public class ESRestConsumer extends JerseyRestConsumer {
 
 	}
 
-	public JsonArray searchDocsByPhrase(String indexName, String type,
+	protected JsonArray searchDocsByPhrase(String indexName, String type,
 			String fieldName, String valuePhrase, Integer limit)
 			throws Exception {
 
@@ -55,7 +54,7 @@ public class ESRestConsumer extends JerseyRestConsumer {
 
 	}
 
-	public JsonArray searchDocsByPhrase(String indexName, String type,
+	protected JsonArray searchDocsByPhrase(String indexName, String type,
 			Map<String, String> fieldValuePair, Integer limit) throws Exception {
 
 		BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
@@ -67,7 +66,7 @@ public class ESRestConsumer extends JerseyRestConsumer {
 
 	}
 
-	public JsonArray searchDocsMultiValueMatch(String indexName, String type,
+	protected JsonArray searchDocsMultiValueMatch(String indexName, String type,
 			Map<String, List<String>> fieldValuePair, Integer limit)
 			throws Exception {
 
@@ -89,14 +88,14 @@ public class ESRestConsumer extends JerseyRestConsumer {
 
 	}
 
-	public JsonArray searchDocs(String indexName, String type, Integer limit)
+	protected JsonArray searchDocs(String indexName, String type, Integer limit)
 			throws Exception {
 
 		return searchDocs(indexName, type, limit, QueryBuilders.matchAllQuery());
 
 	}
 
-	public JsonArray searchDocs(String indexName, String type, Integer limit,
+	protected JsonArray searchDocs(String indexName, String type, Integer limit,
 			QueryBuilder query) throws Exception {
 
 		String queryString = "{\"query\":" + query.toString() + "}";
@@ -135,7 +134,7 @@ public class ESRestConsumer extends JerseyRestConsumer {
 
 	}
 
-	public Map<String, Settings> getIndexSettings(String indexName)
+	protected Map<String, Settings> getIndexSettings(String indexName)
 			throws Exception {
 
 		ClientRequest request = buildRequest(
@@ -148,6 +147,21 @@ public class ESRestConsumer extends JerseyRestConsumer {
 		Map<String, Settings> settings = mapper.convertValue(response, t);
 		return settings;
 
+	}
+	
+	public static void main(String [] ar) throws Exception{
+		
+		ContextManager.initGlobalContext(null);
+		ContextManager.getGlobalContext().setValue("es_endPoint", "http://34.198.179.152:9200");
+		
+		ESRestConsumer consumer = new ESRestConsumer("http://34.198.179.152:9200");
+		Map<String, List<String>> fieldValuePair =new HashMap();
+		fieldValuePair.put("LogType", Lists.newArrayList("FileEanMapping"));
+		fieldValuePair.put("FileName", Lists.newArrayList("LEVIS_ARTICLE_20170209_181643"));
+
+		JsonArray searchDocsMultiValueMatch = consumer.searchDocsMultiValueMatch("_all", "fluentd", fieldValuePair , 10);
+		JsonElement jsonElement = searchDocsMultiValueMatch.get(0);
+		jsonElement.getAsJsonObject();
 	}
 
 }

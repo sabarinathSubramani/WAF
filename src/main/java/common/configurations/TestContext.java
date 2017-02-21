@@ -2,6 +2,7 @@ package common.configurations;
 
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 
+import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,6 +13,7 @@ import org.testng.ITestContext;
 
 import common.configurations.datamodels.Browser;
 import common.configurations.datamodels.Environment;
+import common.helpers.Log;
 import common.utility.Utility;
 
 public class TestContext {
@@ -104,8 +106,12 @@ public class TestContext {
 		setAttribute(context, RETRY_ENABLED, true);
 		setAttribute(context, DEVICE_NAME, "Android Emulator");
 
-		Map<String, String> params = context.getSuite().getXmlSuite()
-				.getAllParameters();
+		Map<String, String> params = null;
+
+		if(context!= null && context.getSuite() != null){
+			params = context.getSuite().getXmlSuite()
+					.getAllParameters();
+		}
 		if (params != null) {
 			for (Entry<String, String> e : params.entrySet()) {
 				setAttribute(e.getKey(), e.getValue());
@@ -116,12 +122,16 @@ public class TestContext {
 	protected void buildTestLevelContext(ITestContext context) {
 
 		buildTestContext(context);
-		Map<String, String> parameters = context.getCurrentXmlTest()
-				.getParameters();
-		if (parameters != null) {
-			for (Entry<String, String> e : parameters.entrySet()) {
-				setValue(e.getKey(), e.getValue());
+		try{
+			Map<String, String> parameters = context.getCurrentXmlTest()
+					.getParameters();
+			if (parameters != null) {
+				for (Entry<String, String> e : parameters.entrySet()) {
+					setValue(e.getKey(), e.getValue());
+				}
 			}
+		}catch(Exception e){
+			System.out.println("unable to initialize Test level context due to "+ e.getMessage());
 		}
 	}
 

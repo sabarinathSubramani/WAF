@@ -2,6 +2,7 @@ package common.helpers;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
@@ -65,27 +66,27 @@ public class JerseyRestConsumer {
 		baseEndPoint = endPoint;
 	}
 
-	public MediaType getRequestMediaType() {
+	protected MediaType getRequestMediaType() {
 		return requestMediaType;
 	}
 
-	public void setRequestMediaType(MediaType requestMediaType) {
+	protected void setRequestMediaType(MediaType requestMediaType) {
 		this.requestMediaType = requestMediaType;
 	}
 
-	public MediaType getResponseMediaType() {
+	protected MediaType getResponseMediaType() {
 		return responseMediaType;
 	}
 
-	public void setResponseMediaType(MediaType responseMediaType) {
+	protected void setResponseMediaType(MediaType responseMediaType) {
 		this.responseMediaType = responseMediaType;
 	}
 
-	public String getBaseEndPoint() {
+	protected String getBaseEndPoint() {
 		return baseEndPoint;
 	}
 
-	public void setBaseEndPoint(String baseEndPoint) {
+	protected void setBaseEndPoint(String baseEndPoint) {
 		this.baseEndPoint = baseEndPoint;
 	}
 
@@ -101,7 +102,6 @@ public class JerseyRestConsumer {
 
 	protected void initConsumerForHttpsConnection(HttpsProtocol protocol){
 
-		HostnameVerifier hostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
 		ClientConfig config = new DefaultClientConfig();
 		SSLContext ctx;
 		try {
@@ -125,7 +125,9 @@ public class JerseyRestConsumer {
 			ctx = SSLContext.getInstance(protocol.name());
 
 			TrustManager[] trustManagers = {x509TrustManager};
-			ctx.init(null, trustManagers , null);
+			ctx.init(null, trustManagers , new SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
+			HostnameVerifier hostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
 			config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES, new HTTPSProperties(hostnameVerifier, ctx));
 		} catch (Exception e) {
 			e.printStackTrace();
