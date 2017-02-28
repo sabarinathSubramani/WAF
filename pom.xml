@@ -5,7 +5,7 @@
 	<groupId>org.YantriKaran</groupId>
 	<artifactId>YantriKaran</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1</version>
+	<version>0.2</version>
 	<name>YantriKaran</name>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
