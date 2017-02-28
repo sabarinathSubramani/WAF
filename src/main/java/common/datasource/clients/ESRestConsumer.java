@@ -35,6 +35,8 @@ public class ESRestConsumer extends JerseyRestConsumer {
 
 	}
 	
+	public static String SEARCH = "_search";
+	
 	public static final String CREATE = "/create";
 
 	public ESRestConsumer(String baseUrl) {
@@ -108,12 +110,12 @@ public class ESRestConsumer extends JerseyRestConsumer {
 			Map<String, String> queryParams = new HashMap<String, String>();
 			queryParams.put(
 					"size",
-					(limit != null && limit > DEFAULT_LIMIT) ? DEFAULT_LIMIT
-							.toString() : limit.toString());
+					(limit != null && limit > DEFAULT_LIMIT) ? limit.toString():DEFAULT_LIMIT
+							.toString() );
 			queryParams.put("from", tempIndex.toString());
 
 			ClientRequest request = buildRequest(
-					constructURI(indexName + "/" + type + "/" + "_search",
+					constructURI(indexName + "/" + type + "/" + SEARCH,
 							queryParams), Method.POST, null, queryString);
 			String response = (String) executeMethod(request, String.class);
 

@@ -123,7 +123,7 @@ public class BaseTest {
 	}
 
 	@AfterTest(alwaysRun = true)
-	public void afterSuite(ITestContext context) {
+	public void afterTest(ITestContext context) {
 		ChromeDriverService service = ContextManager.getTestLevelContext(
 				context).getChromeDriverService();
 		if (service != null)

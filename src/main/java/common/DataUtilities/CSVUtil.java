@@ -31,7 +31,7 @@ public class CSVUtil {
 	 */
 	public static CSVData readDataFromCSV(String fileName) throws Exception{
 
-		InputStream resourceAsStream = CSVUtil.class.getClassLoader().getResourceAsStream(fileName);
+		InputStream resourceAsStream = ClassLoader.getSystemResourceAsStream(fileName);
 		CSVData data = readDataFromCSV(resourceAsStream, null);
 		data.setFileName(fileName);
 		return data;
@@ -46,7 +46,9 @@ public class CSVUtil {
 	
 	public static CSVData readDataFromCSV(String fileName, List<CSVRowFilter> filterList) throws Exception{
 
-		InputStream resourceAsStream = CSVUtil.class.getClassLoader().getResourceAsStream(fileName);
+		InputStream resourceAsStream = ClassLoader.getSystemResourceAsStream(fileName);
+		if(resourceAsStream == null)
+			throw new Exception("File not found in ClassPath. Please check the file name");
 		CSVData data = readDataFromCSV(resourceAsStream, filterList);
 		data.setFileName(fileName);
 		return data;

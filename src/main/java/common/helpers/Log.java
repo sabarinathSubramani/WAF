@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.log4j.Logger;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 
@@ -27,6 +28,7 @@ public class Log {
 			logFlag = true;
 	}
 
+	public static Logger logger = Logger.getLogger(Log.class);
 	public static Map<ITestResult, Integer> actionLogginCountMapper = new ConcurrentHashMap<ITestResult, Integer>();
 
 	public static void actionLog(String message) {
@@ -42,7 +44,7 @@ public class Log {
 			else
 				Reporter.log(currentCount + ". " + message);
 		} else {
-			System.out.println(message);
+			logger.info(message);
 		}
 	}
 
@@ -50,8 +52,9 @@ public class Log {
 
 		if (logFlag) {
 			Reporter.log(massageInfoMessage(message), true);
+			
 		} else {
-			System.out.println(message);
+			logger.info(message);
 		}
 	}
 
@@ -60,7 +63,7 @@ public class Log {
 		if (logFlag) {
 			Reporter.log(message, true);
 		} else {
-			System.out.println(message);
+			logger.warn(message);
 		}
 	}
 
@@ -69,7 +72,7 @@ public class Log {
 			Reporter.log(message + " \n"
 					+ (t != null ? stringifyStackTrace(t) : ""), true);
 		} else {
-			System.out.println(message);
+			logger.error(message, t);
 		}
 	}
 
@@ -120,7 +123,7 @@ public class Log {
 
 	public static String stringifyStackTrace(Throwable t) {
 		String st = ExceptionUtils.getStackTrace(t);
-		System.out.println("error - " + st);
+		logger.error(st);
 		return st;
 	}
 
@@ -193,5 +196,4 @@ public class Log {
 		}
 		return path;
 	}
-
 }
