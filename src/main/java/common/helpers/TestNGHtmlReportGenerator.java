@@ -3,6 +3,7 @@ package common.helpers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +45,38 @@ public class TestNGHtmlReportGenerator implements IReporter {
 		Map<String, Set<ITestResult>> passedTestResultsMap = new TreeMap<String, Set<ITestResult>>();
 		Map<String, Set<ITestResult>> skippedTestResultsMap = new TreeMap<String, Set<ITestResult>>();
 		Map<ITestResult, List<String>> resultLogMapping = new HashMap<ITestResult, List<String>>();
+		List<XmlTest> collatedListFromDifferntSuites = new ArrayList<XmlTest>();
 
-		ISuite suite = suites.get(0);
+		for(ISuite suite : suites){
+			collatedListFromDifferntSuites.addAll(suite.getXmlSuite().getTests());
+			for(XmlTest test : suite.getXmlSuite().getTests()){
+				System.out.println("overal suite results - "+suite.getResults());
+				ISuiteResult iSuiteResult = suite.getResults().get(test.getName());
+				
+				System.out.println("Suite Result for test "+test.getName() +" - "+iSuiteResult);
+				if(iSuiteResult != null){
+					ITestContext testContext = iSuiteResult.getTestContext();
+
+					failedTestResultsMap.put(test.getName(), testContext
+							.getFailedTests().getAllResults());
+					passedTestResultsMap.put(test.getName(), testContext
+							.getPassedTests().getAllResults());
+					skippedTestResultsMap.put(test.getName(), testContext
+							.getSkippedTests().getAllResults());
+
+					for (ITestResult tr : failedTestResultsMap.get(test.getName())) {
+						resultLogMapping.put(tr, Reporter.getOutput(tr));
+					}
+
+					for (ITestResult tr : passedTestResultsMap.get(test.getName())) {
+						resultLogMapping.put(tr, Reporter.getOutput(tr));
+					}
+				}
+
+			}
+		}
+
+		/*ISuite suite = suites.get(0);
 		XmlSuite xmlSuite = xmlSuites.get(0);
 		Map<String, ISuiteResult> results = suite.getResults();
 
@@ -69,8 +100,8 @@ public class TestNGHtmlReportGenerator implements IReporter {
 				resultLogMapping.put(tr, Reporter.getOutput(tr));
 			}
 
-		}
-	
+		}*/
+
 		// move css file to output forlder
 		try {
 			InputStream resourceAsStream = getClass().getClassLoader()
@@ -84,8 +115,9 @@ public class TestNGHtmlReportGenerator implements IReporter {
 			e.printStackTrace();
 		}
 
+
 		try {
-			generateVelocityTemplate(xmlSuite.getTests(), failedTestResultsMap,
+			generateVelocityTemplate(collatedListFromDifferntSuites, failedTestResultsMap,
 					passedTestResultsMap, skippedTestResultsMap,
 					resultLogMapping);
 		} catch (Exception e) {

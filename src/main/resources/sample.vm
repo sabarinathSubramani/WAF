@@ -60,7 +60,9 @@
 <span class= "time"><b>Start Time:</b> $dateTool.format($dateFormat, $failedResult.getStartMillis()) </span>
 </div>
 <div>
-<span><b>Test Decription:</b> $failedMethod.getDescription() </span>
+#if($failedMethod.getDescription().length()>0)
+<span><b>Test Decription:</b>   $failedMethod.getDescription()  </span>
+#end
 <span class = "time">
 <b>Time Taken:</b> $timeTaken.doubleValue() secs
  </span>
@@ -108,7 +110,9 @@
 <span class= "time"><b>Start Time:</b> $dateTool.format($dateFormat, $passedResult.getStartMillis()) </span>
 </div>
 <div>
-<span><b>Test Decription:</b> $passedMethod.getDescription() </span>
+#if($passedMethod.getDescription().length()>0)
+<span><b>Test Decription:</b>   $passedMethod.getDescription()  </span>
+#end
 <span class = "time">
 <b>Time Taken:</b> $timeTaken.doubleValue() secs
  </span>
