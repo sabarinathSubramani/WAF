@@ -77,7 +77,7 @@ public class ESRestConsumer extends JerseyRestConsumer {
 			if (entry.getValue().size() > 1) {
 				BoolQueryBuilder boolQuery1 = QueryBuilders.boolQuery();
 				for (String s : entry.getValue()) {
-					boolQuery1.must(QueryBuilders.matchPhraseQuery(
+					boolQuery1.should(QueryBuilders.matchPhraseQuery(
 							entry.getKey(), s));
 				}
 				boolQuery.must(boolQuery1);

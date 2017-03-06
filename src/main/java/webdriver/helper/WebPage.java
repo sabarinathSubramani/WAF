@@ -38,7 +38,7 @@ public class WebPage {
 
 	public RemoteWebDriver driver = null;
 	public Actions actionBuilder;
-	FluentWait<WebDriver> wait;
+	public FluentWait<WebDriver> wait;
 
 	public WebPage() {
 		driver = (RemoteWebDriver) WebDriverManager.getWebDriver(true);
