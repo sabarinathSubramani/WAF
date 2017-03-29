@@ -9,6 +9,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import common.helpers.Log;
+
 public class WebDriverConfig {
 
 	public static DesiredCapabilities getFireFoxConfig() {
@@ -20,7 +22,8 @@ public class WebDriverConfig {
 			fireFoxprofile = new File(WebDriverConfig.class.getClassLoader()
 					.getResource("FireFoxCustomProfile").toURI());
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.info("no custom firefox profile path given");
+			//e.printStackTrace();
 		}
 
 		FirefoxProfile profile = null;

@@ -1,9 +1,6 @@
 package common.configurations;
 
-import io.appium.java_client.service.local.AppiumDriverLocalService;
-
 import java.io.File;
-
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.os.CommandLine;
 import org.testng.ITestContext;
@@ -12,8 +9,8 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
-
 import common.configurations.datamodels.Browser;
+import io.appium.java_client.service.local.AppiumDriverLocalService;
 import webdriver.helper.AppiumServerLauncher;
 
 /**
@@ -59,7 +56,7 @@ public class BaseTest {
 	/**
 	 * TestNG test level context is initialized here. Also, Appium and chrome
 	 * servers are
-	 * 
+	 * 7
 	 * @param context
 	 * @throws Exception
 	 */

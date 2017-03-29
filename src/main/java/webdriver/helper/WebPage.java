@@ -223,7 +223,7 @@ public class WebPage {
 				.perform();
 	}
 
-	// Upload works with xpath locator only
+	// Upload works with x-path locator only
 	public void uploadDocument(PageElement ele, String absolutePathOfFile) {
 		if (ele.getWebElement().getCssValue("display").equalsIgnoreCase("none")) {
 			String xpath = ele.getBy().toString().replace("By.xpath: ", "");

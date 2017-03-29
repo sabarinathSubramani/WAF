@@ -88,7 +88,26 @@ public class PageElement {
 		this.parent = parent;
 	}
 
+	
+	/**
+	 * clear the existing text and type the new text on the specified field
+	 * @param textToType
+	 */
 	public void type(String textToType) {
+		if (webElement == null)
+			init();
+		Log.actionMessagewithLinktoScreenShot("Typing text after clearing the existing text - " + textToType
+				+ " on " + this.getName());
+		webElement.clear();
+		webElement.sendKeys(textToType);
+	}
+	
+	
+	/**
+	 * sending text to the field. does not clear the existing text
+	 * @param textToType
+	 */
+	public void sendKeys(String textToType) {
 		if (webElement == null)
 			init();
 		Log.actionMessagewithLinktoScreenShot("Typing text - " + textToType
@@ -122,6 +141,13 @@ public class PageElement {
 				+ "' from the dropdown" + getName());
 		Select select = new Select(getWebElement());
 		select.selectByValue(value);
+	}
+	
+	public void selectByText(String text) {
+		Log.actionMessagewithLinktoScreenShot("Selecting Text - '" + text
+				+ "' from the dropdown" + getName());
+		Select select = new Select(getWebElement());
+		select.selectByVisibleText(text);
 	}
 
 	public boolean isDisplayed() {
@@ -178,11 +204,11 @@ public class PageElement {
 	}
 
 	public void hover() {
-
 		if (webElement == null)
 			init();
 		Actions a = new Actions(WebDriverManager.getWebDriverFromContext());
-		a.moveToElement(webElement).release().perform();
+		a.moveToElement(webElement).build().perform();
 	}
+	
 
 }
