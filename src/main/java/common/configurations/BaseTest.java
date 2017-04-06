@@ -56,11 +56,12 @@ public class BaseTest {
 	/**
 	 * TestNG test level context is initialized here. Also, Appium and chrome
 	 * servers are
-	 * 7
+	 * 
 	 * @param context
 	 * @throws Exception
 	 */
 
+	@SuppressWarnings("deprecation")
 	@BeforeTest(alwaysRun = true)
 	public void beforeTest(ITestContext context) throws Exception {
 		ContextManager.initTestLevelContext(context);
@@ -92,6 +93,9 @@ public class BaseTest {
 			System.setProperty("webdriver.chrome.logfile",
 					new File(".").getCanonicalPath() + "/chromedriver.log");
 
+			String chromeDriverPath = CommandLine.find("chromedriver");
+			if(chromeDriverPath== null)
+				throw new Exception("unable to find chrome driver in system path. Please place chromedriver in system path. (ex. /usr/bin/chromedriver, /usr/local/bin/chromdriver, c:/programefiles and add the location to system path");
 			ChromeDriverService defaultService = new ChromeDriverService.Builder()
 					.usingAnyFreePort()
 					.withLogFile(
@@ -99,7 +103,7 @@ public class BaseTest {
 									+ "/chromedriver.log"))
 					.withVerbose(true)
 					.usingDriverExecutable(
-							new File(CommandLine.find("chromedriver"))).build();
+							new File(chromeDriverPath)).build();
 			defaultService.start();
 			ContextManager.getTestLevelContext(context).setValue(
 					TestContext.CHROME_DRIVER_SERVICE, defaultService);

@@ -59,6 +59,9 @@ public class WebDriverConfig {
 		chromePrefs.put("disable-popup-blocking", true);
 		chromePrefs.put("ignore-certifiate-errors", true);
 		chromePrefs.put("download.default_directory", downloadDir);
+		chromePrefs.put("credentials_enable_service", false);
+		chromePrefs.put("profile.password_manager_enabled", false);
+
 		ChromeOptions chromeOptions = new ChromeOptions();
 		chromeOptions.setExperimentalOption("prefs", chromePrefs);
 		chromeOptions.addArguments("--start-maximized");

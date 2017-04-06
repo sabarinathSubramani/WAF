@@ -5,6 +5,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.internal.MouseAction;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -166,6 +167,20 @@ public class PageElement {
 				ContextManager.getGlobalContext()
 				.getWebDriverTimeOutInSeconds());
 		wait.until(ExpectedConditions.presenceOfElementLocated(by));
+	}
+	
+	public void waitForElementToBeVisible(){
+		WebDriverWait wait = new WebDriverWait(WebDriverManager.getWebDriver(),
+				ContextManager.getGlobalContext()
+				.getWebDriverTimeOutInSeconds());
+		wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+	}
+	
+	public void waitForElementToBeInVisible(){
+		WebDriverWait wait = new WebDriverWait(WebDriverManager.getWebDriver(),
+				ContextManager.getGlobalContext()
+				.getWebDriverTimeOutInSeconds());
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
 	}
 
 	public void waitForAttributeValuetoChange(String attributeName,

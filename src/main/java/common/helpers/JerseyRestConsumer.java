@@ -46,12 +46,13 @@ public class JerseyRestConsumer {
 
 	public JerseyRestConsumer(MediaType requestType, MediaType responseType, String endPoint, boolean isHttps){
 
-
+		
 		Log.info("initializing secure Jersey Rest consumer - endpoint: "+ endPoint+" Default Request Mime type - "+requestType.toString()+" Default Response type - " + responseType.toString() );
+		
 		if(isHttps)
-			initConsumerForHttpsConnection(HttpsProtocol.SSL);
+			client= Client.create(customConfigforHttpsConnection(HttpsProtocol.SSL));
 		else
-			initConsumer();
+			client= Client.create(customConfig());
 		requestMediaType = requestType;
 		responseMediaType = responseType;
 		baseEndPoint = endPoint;
@@ -60,7 +61,7 @@ public class JerseyRestConsumer {
 	public JerseyRestConsumer(MediaType requestType, MediaType responseType, String endPoint, boolean isHttps, HttpsProtocol protocol){
 
 		Log.info("initializing secure Jersey Rest consumer - endpoint: "+ endPoint+" Default Request Mime type - "+requestType.toString()+" Default Response type - " + responseType.toString() );
-		initConsumerForHttpsConnection(protocol);
+		client = Client.create(customConfigforHttpsConnection(protocol));
 		requestMediaType = requestType;
 		responseMediaType = responseType;
 		baseEndPoint = endPoint;
@@ -90,19 +91,20 @@ public class JerseyRestConsumer {
 		this.baseEndPoint = baseEndPoint;
 	}
 
-	protected void initConsumer(){
+	protected ClientConfig customConfig(){
 
 		ClientConfig config = new DefaultClientConfig();
 		JacksonJsonProvider jacksonJsonProvider =
 				new JacksonJsonProvider()
 				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		config.getSingletons().add(jacksonJsonProvider);
-		client = Client.create(config);
+		return config;
 	}
 
-	protected void initConsumerForHttpsConnection(HttpsProtocol protocol){
+	protected ClientConfig customConfigforHttpsConnection(HttpsProtocol protocol){
 
-		ClientConfig config = new DefaultClientConfig();
+
+		ClientConfig config = customConfig();
 		SSLContext ctx;
 		try {
 
@@ -132,12 +134,7 @@ public class JerseyRestConsumer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		JacksonJsonProvider jacksonJsonProvider =
-				new JacksonJsonProvider()
-				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		config.getSingletons().add(jacksonJsonProvider);
-		client = Client.create(config);
+		return config;
 	}
 
 	protected URI constructURI(String path, Map<String, String> queryParams){
