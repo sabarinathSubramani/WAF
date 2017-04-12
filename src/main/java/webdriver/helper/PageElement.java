@@ -3,6 +3,7 @@ package webdriver.helper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.MouseAction;
@@ -95,12 +96,18 @@ public class PageElement {
 	 * @param textToType
 	 */
 	public void type(String textToType) {
+		try{
 		if (webElement == null)
 			init();
 		Log.actionMessagewithLinktoScreenShot("Typing text after clearing the existing text - " + textToType
 				+ " on " + this.getName());
 		webElement.clear();
 		webElement.sendKeys(textToType);
+		}catch(WebDriverException ex){
+			Log.infoMessagewithLinktoScreenShot("Failed to type - " + textToType
+					+ " on " + this.getName()+" Refer the below stack trace");
+			throw ex;
+		}
 	}
 	
 	

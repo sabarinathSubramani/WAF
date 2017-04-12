@@ -67,39 +67,6 @@ public class WebPage {
 		});
 	}
 
-	/*public void initElements(WebPage page) {
-
-		// Get fields list from page class and its super class
-		ArrayList<Field> fieldsList = Lists.newArrayList(page.getClass()
-				.getFields());
-		fieldsList.addAll(Lists.newArrayList(page.getClass()
-				.getDeclaredFields()));
-
-		for (Field f : fieldsList) {
-
-			By by = null;
-
-			if (PageElement.class.isAssignableFrom(f.getType())
-					&& f.isAnnotationPresent(FindBy.class)) {
-				FindBy annotation = f.getAnnotation(FindBy.class);
-				by = FindByAnnotationConverter.getByfromFindBy(annotation);
-				if (by != null) {
-					f.setAccessible(true);
-					try {
-						FieldUtils.writeField(page, f.getName(),
-								new PageElement(f.getName(), by), true);
-
-					} catch (IllegalAccessException e) {
-						Log.warn("unable to initialize elements");
-						e.printStackTrace();
-					}
-				}
-			}
-
-		}
-
-	}*/
-
 	public void waitforElementPresent(PageElement ele) {
 		ele.waitforElementPresent();
 	}

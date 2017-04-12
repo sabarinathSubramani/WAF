@@ -3,13 +3,17 @@ package common.configurations;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import common.configurations.datamodels.Browser;
+import common.helpers.Log;
 
 public class WebDriverManager {
 
@@ -71,6 +75,16 @@ public class WebDriverManager {
 					.getTestLevelContext().getAppiumServer().getUrl(),
 					WebDriverConfig.getAndroidConfig());
 			break;
+		}
+		
+		case SELENIUM_GRID:{
+	
+			try {
+				webDriver = new RemoteWebDriver(new URL(ContextManager.getGlobalContext().getValueAsString(TestContext.SELENIUM_GRID_URL)), DesiredCapabilities.firefox());
+			} catch (MalformedURLException e) {
+				Log.error("unable to create GRID driver instance. URL is not valid", e);
+				e.printStackTrace();
+			}
 		}
 
 		default:

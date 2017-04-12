@@ -108,6 +108,13 @@ public class BaseTest {
 			ContextManager.getTestLevelContext(context).setValue(
 					TestContext.CHROME_DRIVER_SERVICE, defaultService);
 		}
+		
+		if(ContextManager.getTestLevelContext(context).getBrowser()
+				.equals(Browser.SELENIUM_GRID)){
+			String seleniumGridUrl = ContextManager.getGlobalContext()
+					.getValueAsString(TestContext.SELENIUM_GRID_URL);
+			
+		}
 	}
 
 	@BeforeMethod(alwaysRun = true)

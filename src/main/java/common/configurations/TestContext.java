@@ -16,6 +16,46 @@ import common.configurations.datamodels.Environment;
 import common.helpers.Log;
 import common.utility.Utility;
 
+/**
+ * set of key value pairs accessible across the test project. 
+ * As in any application, context here also does the same purpose of holding configuration values 
+ * that would be available to access anywhere in the tests.
+ * 
+ * Context Manipulation: 
+ * Context is intialized with set of set key value pairs before any tests run. 
+ * There are four ways where a context variables be assigned with values.
+ * 	- Jenkins parameters
+ *  - using TextNG Xml/ testng command line parameters
+ *  - using a properties file
+ *  - default values
+ * 
+ * The values for each context parameter is initliatzed from various sources in the same order mentioed before.
+ *  ex. To initialize value for environment, if environment parameter is set in jenkins, the value will be used,
+ *  if not, the value will be checked in testng context, then in properties files. 
+ *  if it is not found in all three, a default value of QA is set to it
+ *  
+ *  
+ *  		RETRY_COUNT - 2
+ *  		BROWSER  	- Browser.FIREFOX);
+ *  		PLATFORM 	- DESKTOP");
+ *  
+ *		// setting web timeout in ms
+ *		setAttribute(context, WEBDRIVER_TIMEOUT, "60000");
+ *
+ *		setAttribute(context, ENABLE_LOGS, true);
+ *		setAttribute(context, ENABLE_REPORTING, true);
+ *
+ *		// setting default report directory
+ *		setAttribute(context, TESTNG_REPORT_DIR, System.getProperty("user.dir")
+ *				+ "/test-output/");
+ *
+ *		setAttribute(context, RETRY_ENABLED, true);
+ *		setAttribute(context, DEVICE_NAME, "Android Emulator");
+ *  
+ * 
+ * @author sabarinath.s
+ *
+ */
 public class TestContext {
 
 	public static final String ENVIRONMENT = "environment";
@@ -36,6 +76,7 @@ public class TestContext {
 	public static final String WEBDRIVER = "webdriver";
 	public static final String CHROME_DRIVER_SERVICE = "chrome_driver_service";
 	public static final String CHROME_DRIVER_PATH = "chrome_driver_path";
+	public static final String SELENIUM_GRID_URL = "selenium_grid_url";
 
 	// Android configurations
 	public static final String APP_LOCATION = "path_to_app";
